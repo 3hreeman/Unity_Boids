@@ -148,10 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046c44aa1bc8cdd458dad75d6506ec05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boidPrefab: {fileID: 8586577768937971120, guid: d2bc37242e76df74ab974767582410f1, type: 3}
-  numberOfBoids: 1000
+  boidPrefab: {fileID: 6623117266538281147, guid: 670300976a5cb4014957dfbd304d31cb, type: 3}
+  numberOfBoids: 100
   boids: []
   GenerateRadius: 5
+  BoidSpeed: 3
 --- !u!4 &779087995
 Transform:
   m_ObjectHideFlags: 0

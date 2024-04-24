@@ -4,20 +4,24 @@ using UnityEngine;
 
 public class BoidObject : MonoBehaviour {
     public float MoveSpd = 1.0f;
-    List<BoidObject> _nearBoidList = new List<BoidObject>();
+    public List<BoidObject> _nearBoidList = new List<BoidObject>();
     public void Init(float spd) {
         MoveSpd = spd;
     }
 
     // Update is called once per frame
     void Update() {
-        
+        FindNearBoids();
+        UpdateCohesionVector();
+        var targetVec = Vector3.Lerp(transform.forward, lastCohesionVector, Time.deltaTime);
+        transform.rotation = Quaternion.LookRotation(targetVec);
+        transform.position += targetVec * MoveSpd * Time.deltaTime;
     }
     
     private void FindNearBoids() {
         // Find near boids
         _nearBoidList.Clear();
-        var colliders = Physics.OverlapSphere(this.transform.position, 5.0f, LayerMask.GetMask("BoidLayer"));
+        var colliders = Physics.OverlapSphere(transform.position, 5.0f, 1 << LayerMask.NameToLayer("BoidLayer"));
         foreach (var collider in colliders) {
             if (collider.gameObject != this.gameObject) {
                 var boid = collider.gameObject.GetComponent<BoidObject>();
@@ -26,5 +30,15 @@ public class BoidObject : MonoBehaviour {
                 }
             }
         }
+    }
+    public Vector3 lastCohesionVector = Vector3.zero;
+    private void UpdateCohesionVector() {
+        // Cohesion
+        Vector3 center = Vector3.zero;
+        foreach (var boid in _nearBoidList) {
+            center += boid.transform.position;
+        }
+        center /= _nearBoidList.Count;
+        lastCohesionVector = center - transform.position;
     }
 }

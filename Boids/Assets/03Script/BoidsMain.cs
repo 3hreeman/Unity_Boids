@@ -8,6 +8,7 @@ public class BoidsMain : MonoBehaviour
     public int numberOfBoids;
     public List<GameObject> boids = new List<GameObject>();
     public float GenerateRadius = 10.0f;
+    public float BoidSpeed = 3.0f;
     // Start is called before the first frame update
     void Start() {
         CreateBoids();
@@ -19,13 +20,8 @@ public class BoidsMain : MonoBehaviour
             var randomRotation = Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
             GameObject boid = Instantiate(boidPrefab, pos, randomRotation);
             boid.transform.parent = this.transform;
+            boid.GetComponent<BoidObject>().Init(BoidSpeed);
             boids.Add(boid);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
