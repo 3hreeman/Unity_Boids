@@ -148,6 +148,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 046c44aa1bc8cdd458dad75d6506ec05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boidPrefab: {fileID: 6623117266538281147, guid: 670300976a5cb4014957dfbd304d31cb, type: 3}
+  numberOfBoids: 100
+  boids: []
+  GenerateRadius: 5
+  BoidSpeed: 3
 --- !u!4 &779087995
 Transform:
   m_ObjectHideFlags: 0
@@ -222,7 +227,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 100
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
