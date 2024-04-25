@@ -38,7 +38,7 @@ public class BoidObject : MonoBehaviour {
         foreach (var boid in _nearBoidList) {
             center += boid.transform.position;
         }
-        center /= _nearBoidList.Count;
+        center /= Mathf.Max(1, _nearBoidList.Count);
         lastCohesionVector = center - transform.position;
     }
 }
