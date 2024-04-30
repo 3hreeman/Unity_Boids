@@ -11,6 +11,6 @@ public class UITestPanel : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        text.text = gamePadController.GetStatusText();
+        text.text = gamePadController.GetDebugStatusText();
     }
 }
