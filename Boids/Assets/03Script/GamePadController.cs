@@ -18,6 +18,7 @@ namespace Game.Combat {
         public Camera mainCam;
 
         private void Awake() {
+            Input.multiTouchEnabled = false;
             stickRange = padBgRect.sizeDelta.x / 2;
             padObject.SetActive(false);
         }
@@ -26,6 +27,7 @@ namespace Game.Combat {
             stick.anchoredPosition = Vector2.zero;
             inputVector = Vector2.zero;
             isRun = false;
+            _isActive = false;
         }
         
         void ControlStick(Vector2 pos) {
@@ -35,19 +37,8 @@ namespace Game.Combat {
 
             inputVector = clampDir.normalized;
             isRun = Mathf.Abs(inputVector.x) > 0.5f || Mathf.Abs(inputVector.y) > 0.5f ? true : false;
-            // playerUnit.UpdatePlayerInput(inputVector);
         }
         
-        public void OnEndDrag(PointerEventData eventData) {
-            if(_isActive == false) {
-                return;
-            }
-            Debug.LogWarning("OnEndDrag()");
-            stick.anchoredPosition = Vector2.zero;
-            _isActive = false;
-            isRun = false;
-        }
-
         public Canvas canvas;
 
         public void Update() {
@@ -65,7 +56,6 @@ namespace Game.Combat {
                     SetControlState(false);
                 }
             }
-
 
             if (_isActive) {
                 ControlStick(Input.mousePosition / canvas.scaleFactor);
@@ -88,12 +78,6 @@ namespace Game.Combat {
             padObject.SetActive(_isActive);
         }
         
-        private void EndControl() {
-            ResetStick();
-            padObject.SetActive(false);
-            _isActive = false;
-        }
-        
         private bool IsPointerOverUIObject() {
             PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
             eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
@@ -102,8 +86,8 @@ namespace Game.Combat {
             return results.Count > 0;
         }
         
-        public string GetStatusText() {
-            return $"isInput: {_isActive}\ninputVector: {inputVector}\nTouchCount: {Input.touchCount}";
+        public string GetDebugStatusText() {
+            return $"isActive: {_isActive}\ninputVector: {inputVector}\nTouchCount: {Input.touchCount}";
         }
     }
 }
