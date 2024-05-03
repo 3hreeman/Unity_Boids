@@ -657,10 +657,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boidPrefab: {fileID: 6623117266538281147, guid: 670300976a5cb4014957dfbd304d31cb, type: 3}
-  numberOfBoids: 100
+  numberOfBoids: 500
   boids: []
   GenerateRadius: 20
   BoidSpeed: 5
+  BoidRadius: 5
 --- !u!4 &779087995
 Transform:
   m_ObjectHideFlags: 0
