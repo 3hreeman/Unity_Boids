@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoidObject : MonoBehaviour {
-    public float MoveSpd = 1.0f;
+    private float MoveSpd = 3;
+    private float Radius = 5;
     public List<BoidObject> _nearBoidList = new List<BoidObject>();
     public void Init(float spd) {
         MoveSpd = spd;
@@ -15,13 +16,13 @@ public class BoidObject : MonoBehaviour {
         UpdateCohesionVector();
         var targetVec = Vector3.Lerp(transform.forward, lastCohesionVector, Time.deltaTime);
         transform.rotation = Quaternion.LookRotation(targetVec);
-        transform.position += targetVec * MoveSpd * Time.deltaTime;
+        transform.position += targetVec * BoidsMain.GlobalSpd * Time.deltaTime;
     }
     
     private void FindNearBoids() {
         // Find near boids
         _nearBoidList.Clear();
-        var colliders = Physics.OverlapSphere(transform.position, 5.0f, 1 << LayerMask.NameToLayer("BoidLayer"));
+        var colliders = Physics.OverlapSphere(transform.position, BoidsMain.GlobalRadius, 1 << LayerMask.NameToLayer("BoidLayer"));
         foreach (var collider in colliders) {
             if (collider.gameObject != this.gameObject) {
                 var boid = collider.gameObject.GetComponent<BoidObject>();
