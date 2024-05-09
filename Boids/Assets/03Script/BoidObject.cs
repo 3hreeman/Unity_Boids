@@ -9,12 +9,17 @@ public class BoidObject : MonoBehaviour {
     public void Init(float spd) {
         MoveSpd = spd;
     }
-
+    
     // Update is called once per frame
     void Update() {
         FindNearBoids();
-        UpdateCohesionVector();
-        var targetVec = Vector3.Lerp(transform.forward, lastCohesionVector, Time.deltaTime);
+        var cohesion = UpdateCohesionVector() * BoidsMain.Instance.CohesionWeight;
+        var alignment = UpdateAlignmentVector() * BoidsMain.Instance.AlignmentWeight;
+        var separation = UpdateSeparationVector() * BoidsMain.Instance.SeparationWeight;
+        
+        var targetVec = cohesion + alignment + separation;
+        
+        targetVec = Vector3.Lerp(transform.forward, targetVec, Time.deltaTime);
         transform.rotation = Quaternion.LookRotation(targetVec);
         transform.position += targetVec * BoidsMain.GlobalSpd * Time.deltaTime;
     }
@@ -32,14 +37,37 @@ public class BoidObject : MonoBehaviour {
             }
         }
     }
-    public Vector3 lastCohesionVector = Vector3.zero;
-    private void UpdateCohesionVector() {
+    
+    private Vector3 UpdateCohesionVector() {
         // Cohesion
         Vector3 center = Vector3.zero;
         foreach (var boid in _nearBoidList) {
             center += boid.transform.position;
         }
         center /= Mathf.Max(1, _nearBoidList.Count);
-        lastCohesionVector = center - transform.position;
+        return center - transform.position;
+    }
+    
+    private Vector3 UpdateAlignmentVector() {
+        // Alignment
+        Vector3 alignment = Vector3.zero;
+        if(_nearBoidList.Count == 0) return alignment;
+        
+        foreach (var boid in _nearBoidList) {
+            alignment += boid.transform.forward;
+        }
+        return alignment/_nearBoidList.Count;
+    }
+    
+    public Vector3 UpdateSeparationVector() {
+        // Separation
+        Vector3 separation = Vector3.zero;
+        if(_nearBoidList.Count == 0) return separation;
+        
+        foreach (var boid in _nearBoidList) {
+            var diff = transform.position - boid.transform.position;
+            separation += diff;
+        }
+        return separation/_nearBoidList.Count;
     }
 }

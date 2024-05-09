@@ -46,9 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98b8368c3d3e2c642b097aed7a8d14a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpd: 1
   _nearBoidList: []
-  lastCohesionVector: {x: 0, y: 0, z: 0}
+  CohesionWeight: 1
+  SeparationWeight: 0.21
+  AlignmentWeight: 1
 --- !u!65 &4226470448155566949
 BoxCollider:
   m_ObjectHideFlags: 0

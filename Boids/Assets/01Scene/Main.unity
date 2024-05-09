@@ -660,8 +660,11 @@ MonoBehaviour:
   numberOfBoids: 500
   boids: []
   GenerateRadius: 20
-  BoidSpeed: 5
-  BoidRadius: 5
+  BoidSpeed: 5.61
+  BoidRadius: 1.52
+  CohesionWeight: 1
+  SeparationWeight: 0.33
+  AlignmentWeight: 1
 --- !u!4 &779087995
 Transform:
   m_ObjectHideFlags: 0
