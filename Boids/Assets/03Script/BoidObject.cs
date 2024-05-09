@@ -32,7 +32,9 @@ public class BoidObject : MonoBehaviour {
             if (collider.gameObject != this.gameObject) {
                 var boid = collider.gameObject.GetComponent<BoidObject>();
                 if (boid != null) {
-                    _nearBoidList.Add(boid);
+                    if (_nearBoidList.Count < BoidsMain.Instance.MaxNearBoid) {
+                        _nearBoidList.Add(boid);
+                    }
                 }
             }
         }

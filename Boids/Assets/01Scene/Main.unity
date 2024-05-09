@@ -659,12 +659,13 @@ MonoBehaviour:
   boidPrefab: {fileID: 6623117266538281147, guid: 670300976a5cb4014957dfbd304d31cb, type: 3}
   numberOfBoids: 500
   boids: []
-  GenerateRadius: 20
+  GenerateRadius: 15.07
   BoidSpeed: 5.61
-  BoidRadius: 1.52
-  CohesionWeight: 1
-  SeparationWeight: 0.33
+  BoidRadius: 6.59
+  CohesionWeight: 2.8
+  SeparationWeight: 2
   AlignmentWeight: 1
+  MaxNearBoid: 10
 --- !u!4 &779087995
 Transform:
   m_ObjectHideFlags: 0
