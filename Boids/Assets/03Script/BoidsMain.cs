@@ -16,6 +16,7 @@ public class BoidsMain : MonoBehaviour
     public float SeparationWeight = 1;
     public float AlignmentWeight = 1;
     
+    public int MaxNearBoid = 10;
     public static float GlobalSpd => Instance.BoidSpeed;
     public static float GlobalRadius => Instance.BoidRadius
     ;
