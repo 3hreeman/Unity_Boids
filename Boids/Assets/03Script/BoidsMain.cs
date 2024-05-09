@@ -11,6 +11,11 @@ public class BoidsMain : MonoBehaviour
     [Range(5, 20)] public float GenerateRadius = 10.0f;
     [Range(1, 10)] public float BoidSpeed = 3.0f;
     [Range(1, 10)] public float BoidRadius = 5.0f;
+    
+    public float CohesionWeight = 1;
+    public float SeparationWeight = 1;
+    public float AlignmentWeight = 1;
+    
     public static float GlobalSpd => Instance.BoidSpeed;
     public static float GlobalRadius => Instance.BoidRadius
     ;
