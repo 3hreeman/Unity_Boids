@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1865574097376579536}
   - component: {fileID: 2427415941486671163}
   - component: {fileID: 1971671208635117012}
-  m_Layer: 12
+  m_Layer: 10
   m_Name: BoidUnit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3563805741912128886}
   - component: {fileID: 2350248217385566993}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 6320047686488685439}
   - component: {fileID: 8606858022274581723}
   - component: {fileID: 4968997197009847575}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: UnitModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
