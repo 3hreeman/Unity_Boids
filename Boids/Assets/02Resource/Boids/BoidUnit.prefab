@@ -75,10 +75,10 @@ MonoBehaviour:
   neighbourDistance: 10
   boidUnitLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1024
   obstacleLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 32768
 --- !u!1 &2335109671381835991
 GameObject:
   m_ObjectHideFlags: 0

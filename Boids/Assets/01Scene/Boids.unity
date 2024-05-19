@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 102335667}
   - component: {fileID: 102335666}
   - component: {fileID: 102335665}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Sphere (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -365,7 +365,7 @@ GameObject:
   - component: {fileID: 348868491}
   - component: {fileID: 348868490}
   - component: {fileID: 348868489}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Cube (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1240,7 +1240,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &870728321
 Transform:
   m_ObjectHideFlags: 0
@@ -1276,7 +1276,7 @@ GameObject:
   - component: {fileID: 896722213}
   - component: {fileID: 896722212}
   - component: {fileID: 896722211}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Cube (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1383,7 +1383,7 @@ GameObject:
   - component: {fileID: 918602593}
   - component: {fileID: 918602592}
   - component: {fileID: 918602591}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Cube (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1943,7 +1943,7 @@ GameObject:
   - component: {fileID: 1082277373}
   - component: {fileID: 1082277372}
   - component: {fileID: 1082277371}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Cube (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2658,7 +2658,7 @@ GameObject:
   - component: {fileID: 1852982288}
   - component: {fileID: 1852982287}
   - component: {fileID: 1852982286}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2833,7 +2833,7 @@ GameObject:
   - component: {fileID: 1862863575}
   - component: {fileID: 1862863574}
   - component: {fileID: 1862863573}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Cube (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3067,7 +3067,7 @@ GameObject:
   - component: {fileID: 2137008979}
   - component: {fileID: 2137008978}
   - component: {fileID: 2137008977}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
