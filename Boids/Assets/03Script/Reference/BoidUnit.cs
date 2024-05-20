@@ -223,7 +223,7 @@ namespace Boid.Reference {
                 if (_depth + 1 < myBoids.GizmoColors.Length - 1)
                     neighbours[i].DrawVectorGizmo(_depth + 1);
 
-                Debug.DrawLine(this.transform.position, neighbours[i].transform.position,
+                 Debug.DrawLine(this.transform.position, neighbours[i].transform.position,
                     myBoids.GizmoColors[_depth + 1]);
                 Debug.DrawLine(this.transform.position, this.transform.position + targetVec, myBoids.GizmoColors[0]);
             }
