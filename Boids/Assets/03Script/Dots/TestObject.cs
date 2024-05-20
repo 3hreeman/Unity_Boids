@@ -1,10 +1,10 @@
+using Unity.Entities;
 using UnityEngine;
 
-public class TestObject : MonoBehaviour
-{
-    public Vector3 TargetVector { get; private set; }
+public class TestObject : MonoBehaviour {
+    public Vector3 TargetVector;
     public float speed = 5f;
-
+    
     private void Start() {
         speed = Random.Range(1f, 5f);
         // TargetVector를 랜덤하게 초기화
