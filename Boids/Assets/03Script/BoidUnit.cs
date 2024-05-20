@@ -1,14 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class BoidUnit : MonoBehaviour {
     #region Variables & Initializer
 
     [Header("Info")] BoidsMain myBoids;
-    List<BoidUnit> neighbours = new List<BoidUnit>();
-
+    NativeList<float3> nearBoidPosList = new NativeList<float3>();
+    
     Vector3 targetVec;
     Vector3 egoVector;
 
@@ -63,42 +66,20 @@ public class BoidUnit : MonoBehaviour {
             transform.gameObject.layer = LayerMask.NameToLayer("Obstacle");
         }
 
-        findNeighbourCoroutine = StartCoroutine("FindNeighbourCoroutine");
-        calculateEgoVectorCoroutine = StartCoroutine("CalculateEgoVectorCoroutine");
+        // findNeighbourCoroutine = StartCoroutine("FindNeighbourCoroutine");
+        // calculateEgoVectorCoroutine = StartCoroutine("CalculateEgoVectorCoroutine");
     }
 
     #endregion
 
-    void UpdateMovement() {
+    public void UpdateMovementData() {
+        movementData.UpdateData(additionalSpeed, _transform.position, _transform.forward, nearBoidPosList);
+    }
+    
+    public void UpdateMovement() {
         transform.rotation = Quaternion.LookRotation(movementData.targetVector);
         transform.position = movementData.position;
     }
-    void Update() {
-        if (additionalSpeed > 0)
-            additionalSpeed -= Time.deltaTime;
-
-        var tr = transform;
-
-        movementData.UpdateData(additionalSpeed, _transform.position, _transform.forward, neighbours.Select(e=>e._transform.position).ToList());
-    }
-
-    private void UpdateColor() {
-        if (myBoids.protectiveColor && !isEnemy && neighbours.Count > 0) {
-            Vector3 colorSum = new Vector3(myColor.r, myColor.g, myColor.b);
-            for (int i = 0; i < neighbours.Count; i++) {
-                Color tmpColor = neighbours[i].myColor;
-                colorSum += new Vector3(tmpColor.r, tmpColor.g, tmpColor.b);
-            }
-
-            myMeshRenderer.material.color = Color.Lerp(myMeshRenderer.material.color,
-                new Color(colorSum.x / neighbours.Count, colorSum.y / neighbours.Count,
-                    colorSum.z / neighbours.Count, 1f), Time.deltaTime);
-        }
-        else {
-            myMeshRenderer.material.color = Color.Lerp(myMeshRenderer.material.color, myColor, Time.deltaTime);
-        }
-    }
-
 
     #region Calculate Vectors
 
@@ -109,12 +90,12 @@ public class BoidUnit : MonoBehaviour {
     }
 
     IEnumerator FindNeighbourCoroutine() {
-        neighbours.Clear();
+        nearBoidPosList = new NativeList<float3>();
 
         Collider[] colls = Physics.OverlapSphere(transform.position, neighbourDistance, boidUnitLayer);
         for (int i = 0; i < colls.Length; i++) {
             if (Vector3.Angle(transform.forward, colls[i].transform.position - transform.position) <= FOVAngle) {
-                neighbours.Add(colls[i].GetComponent<BoidUnit>());
+                nearBoidPosList.Add(colls[i].transform.position);
             }
 
             if (i > maxNeighbourCount) {
@@ -126,90 +107,6 @@ public class BoidUnit : MonoBehaviour {
         findNeighbourCoroutine = StartCoroutine("FindNeighbourCoroutine");
     }
 
-    private Vector3 CalculateCohesionVector() {
-        Vector3 cohesionVec = Vector3.zero;
-        if (neighbours.Count > 0) {
-            // 이웃 unit들의 위치 더하기
-            for (int i = 0; i < neighbours.Count; i++) {
-                cohesionVec += neighbours[i].transform.position;
-            }
-        }
-        else {
-            // 이웃이 없으면 vector3.zero 반환
-            return cohesionVec;
-        }
-
-        // 중심 위치로의 벡터 찾기
-        cohesionVec /= neighbours.Count;
-        cohesionVec -= transform.position;
-        cohesionVec.Normalize();
-        return cohesionVec;
-    }
-
-    private Vector3 CalculateAlignmentVector() {
-        Vector3 alignmentVec = transform.forward;
-        if (neighbours.Count > 0) {
-            // 이웃들이 향하는 방향의 평균 방향으로 이동
-            for (int i = 0; i < neighbours.Count; i++) {
-                alignmentVec += neighbours[i].transform.forward;
-            }
-        }
-        else {
-            // 이웃이 없으면 그냥 forward로 이동
-            return alignmentVec;
-        }
-
-        alignmentVec /= neighbours.Count;
-        alignmentVec.Normalize();
-        return alignmentVec;
-    }
-
-    private Vector3 CalculateSeparationVector() {
-        Vector3 separationVec = Vector3.zero;
-        if (neighbours.Count > 0) {
-            // 이웃들을 피하는 방향으로 이동
-            for (int i = 0; i < neighbours.Count; i++) {
-                separationVec += (transform.position - neighbours[i].transform.position);
-            }
-        }
-        else {
-            // 이웃이 없으면 vector.zero 반환
-            return separationVec;
-        }
-
-        separationVec /= neighbours.Count;
-        separationVec.Normalize();
-        return separationVec;
-    }
-
-    private Vector3 CalculateBoundsVector() {
-        Vector3 offsetToCenter = myBoids.transform.position - transform.position;
-        return offsetToCenter.magnitude >= myBoids.spawnRange ? offsetToCenter.normalized : Vector3.zero;
-    }
-
-    private Vector3 CalculateObstacleVector() {
-        Vector3 obstacleVec = Vector3.zero;
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, obstacleDistance, obstacleLayer)) {
-            Debug.DrawLine(transform.position, hit.point, Color.black);
-            obstacleVec = hit.normal;
-            additionalSpeed = 10;
-        }
-
-        return obstacleVec;
-    }
-
     #endregion
-
-
-    public void DrawVectorGizmo(int _depth) {
-        for (int i = 0; i < neighbours.Count; i++) {
-            if (_depth + 1 < myBoids.GizmoColors.Length - 1)
-                neighbours[i].DrawVectorGizmo(_depth + 1);
-
-            Debug.DrawLine(this.transform.position, neighbours[i].transform.position,
-                myBoids.GizmoColors[_depth + 1]);
-            Debug.DrawLine(this.transform.position, this.transform.position + targetVec, myBoids.GizmoColors[0]);
-        }
-    }
+    
 }
