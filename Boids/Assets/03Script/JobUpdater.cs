@@ -1,54 +1,73 @@
+using System;
 using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class JobUpdater : MonoBehaviour
 {
     public BoidsMain boidsMain;
-    // Start is called before the first frame update
-    void Start()
-    {
+
+    private MovementJob movementJob;
+    public JobHandle jobHandle;
+
+
+    private void Update() {
+        movementJob = new MovementJob {
+            deltaTime = Time.deltaTime,
+            movementData = new NativeArray<MovementData>(boidsMain.boidCount, Allocator.TempJob)
+        };
+        
+        for (int i = 0; i < boidsMain.boidCount; i++) {
+            boidsMain.boidUnits[i].UpdateMovementData();
+            movementJob.movementData[i] = boidsMain.boidUnits[i].movementData;
+        }
+        
+        jobHandle = movementJob.Schedule(boidsMain.boidCount, 64);
+        
+        for (int i = 0; i < boidsMain.boidCount; i++) {
+            boidsMain.boidUnits[i].movementData = movementJob.movementData[i];
+            boidsMain.boidUnits[i].UpdateMovement();
+        }
         
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnDestroy() {
+        jobHandle.Complete();
+        movementJob.movementData.Dispose();
     }
 }
 
 public struct MovementData {
-    public Vector3 boundCenter;
+    public float3 boundCenter;
     public float boundRadius;
     
     public float speed;
     public float additionalSpeed;
-    public Vector3 forward;
-    public Vector3 position;
-    public List<Vector3> neighborVectors;
-
+    public float3 forward;
+    public float3 position;
+    public NativeList<float3> neighborVectors;
     
-    public Vector3 targetVector;
+    public float3 targetVector;
     
-    public Vector3 cohesionVector;
+    public float3 cohesionVector;
     public float cohesionWeight;
     
-    public Vector3 alignmentVector;
+    public float3 alignmentVector;
     public float alignmentWeight;
     
-    public Vector3 separationVector;
+    public float3 separationVector;
     public float separationWeight;
 
-    public Vector3 boundsVector;
+    public float3 boundsVector;
     public float boundsWeight;
     
-    public Vector3 obstacleVector;
+    public float3 obstacleVector;
     public float obstacleWeight;
     
-    public Vector3 egoVector;    
+    public float3 egoVector;    
     public float egoWeight;
 
     public void Init(BoidsMain main, Vector3 pos, float spd) {
@@ -58,59 +77,59 @@ public struct MovementData {
         speed = spd;
     }
     
-    public void UpdateData(float addSpd, Vector3 pos, Vector3 fwd, List<Vector3> neighbors) {
+    public void UpdateData(float addSpd, Vector3 pos, Vector3 fwd, NativeList<float3> neighbors) {
         additionalSpeed = addSpd;
         position = pos;
         forward = fwd;
         neighborVectors = neighbors;
     }
     
-    public Vector3 CalculateCohesion() {
-        Vector3 cohesion = Vector3.zero;
-        if(neighborVectors.Count == 0) return cohesion;
+    public float3 CalculateCohesion() {
+        float3 cohesion = float3.zero;
+        if(neighborVectors.Length == 0) return cohesion;
         
         foreach (var neighborVector in neighborVectors) {
             cohesion += neighborVector;
         }
-        cohesion /= neighborVectors.Count;
+        cohesion /= neighborVectors.Length;
         cohesion -= position;
-        cohesion.Normalize();
-
+        cohesion = math.normalize(cohesion);
+        
         cohesionVector = cohesion;
         return cohesionVector * cohesionWeight;
     }
     
-    public Vector3 CalculateAlignment() {
-        Vector3 alignment = Vector3.forward;
-        if(neighborVectors.Count == 0) return alignment;
+    public float3 CalculateAlignment() {
+        float3 alignment = new float3(0, 0, 1);
+        if(neighborVectors.Length == 0) return alignment;
         
         foreach (var neighborVector in neighborVectors) {
             alignment += neighborVector;
         }
-        alignment /= neighborVectors.Count;
-        alignment.Normalize();
+        alignment /= neighborVectors.Length;
+        alignment = math.normalize(alignment);
 
         alignmentVector = alignment;
         return alignmentVector * alignmentWeight;
     }
     
-    public Vector3 CalculateSeparation() {
-        Vector3 separation = Vector3.zero;
-        if(neighborVectors.Count == 0) return separation;
+    public float3 CalculateSeparation() {
+        float3 separation = float3.zero;
+        if(neighborVectors.Length == 0) return separation;
         
         foreach (var neighborVector in neighborVectors) {
             separation += neighborVector;
         }
-        separation /= neighborVectors.Count;
-        separation.Normalize();
+        separation /= neighborVectors.Length;
+        separation = math.normalize(separation);
 
         separationVector = separation;
         return separationVector * separationWeight;
     }
 
-    public Vector3 CalculateBounds() {
+    public float3 CalculateBounds() {
         var offsetToCenter = boundCenter - position;
-        boundsVector = offsetToCenter.magnitude >= boundRadius ? offsetToCenter.normalized : Vector3.zero;
+        boundsVector = Vector3.Magnitude(offsetToCenter) >= boundRadius ? math.normalize(offsetToCenter) : Vector3.zero;
         return boundsVector * boundsWeight;
     }
     

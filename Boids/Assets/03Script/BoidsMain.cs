@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
@@ -37,8 +38,11 @@ public class BoidsMain : MonoBehaviour {
     public float enemyPercentage = 0.01f;
     public Color[] GizmoColors;
 
+    public BoidUnit[] boidUnits; 
     void Start() {
         // Generate Boids
+        Instance = this;
+        boidUnits = new BoidUnit[boidCount];
         boundMR = GetComponentInChildren<MeshRenderer>();
         for (int i = 0; i < boidCount; i++) {
             Vector3 randomVec = Random.insideUnitSphere;
@@ -47,6 +51,7 @@ public class BoidsMain : MonoBehaviour {
             BoidUnit currUnit = Instantiate(boidUnitPrefab, this.transform.position + randomVec, randomRot);
             currUnit.transform.SetParent(this.transform);
             currUnit.InitializeUnit(this, Random.Range(speedRange.x, speedRange.y), i);
+            boidUnits[i] = currUnit;
         }
     }
 
@@ -65,12 +70,7 @@ public class BoidsMain : MonoBehaviour {
                 currUnit = null;
             }
         }
-
-        // we can see curr Unit's neighbour & target Vector
-        if (currUnit) {
-            currUnit.DrawVectorGizmo(0);
-        }
-
+        
         // camera switch
         if (cameraFollowUnit && currUnit != null) {
             originCam.gameObject.SetActive(false);
