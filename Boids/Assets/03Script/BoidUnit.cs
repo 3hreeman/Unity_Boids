@@ -73,7 +73,6 @@ public class BoidUnit : MonoBehaviour {
     #endregion
 
     public void UpdateMovementData() {
-        movementData.UpdateData(additionalSpeed, _transform.position, _transform.forward, nearBoidPosList);
     }
     
     public void UpdateMovement() {
