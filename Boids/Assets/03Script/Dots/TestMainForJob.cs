@@ -15,12 +15,12 @@ public class TestMainForJob : MonoBehaviour {
     public JobHandle jobHandle;
     public TestJob job;
     
-    public GameObject[] testObjects;
+    private GameObject[] testObjects;
 
-    public NativeArray<float3> DirVectors;
-    public NativeArray<float> Speeds;
-    public Transform[] Positions;
-    public TransformAccessArray PositionsAccess;
+    private NativeArray<float3> DirVectors;
+    private NativeArray<float> Speeds;
+    private Transform[] Positions; 
+    private TransformAccessArray PositionsAccess;
     
     // Start is called before the first frame update
     void Start() {
