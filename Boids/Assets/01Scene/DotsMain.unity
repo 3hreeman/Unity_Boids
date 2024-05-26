@@ -288,7 +288,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8557447440765959408, guid: 0ae0d2b9889a30e42baa9a71ae01af68, type: 3}
-  TestCount: 10000
+  TestCount: 20000
 --- !u!4 &1416188424
 Transform:
   m_ObjectHideFlags: 0
@@ -426,9 +426,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 8557447440765959408, guid: 0673ae05957d74adb8ffe7b31fc8093c, type: 3}
-  TestCount: 10000
-  testObjects: []
-  Positions: []
+  TestCount: 20000
 --- !u!4 &2147014657
 Transform:
   m_ObjectHideFlags: 0
