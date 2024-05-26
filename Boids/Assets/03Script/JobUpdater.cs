@@ -15,22 +15,6 @@ public class JobUpdater : MonoBehaviour
 
 
     private void Update() {
-        movementJob = new MovementJob {
-            deltaTime = Time.deltaTime,
-            movementData = new NativeArray<MovementData>(boidsMain.boidCount, Allocator.TempJob)
-        };
-        
-        for (int i = 0; i < boidsMain.boidCount; i++) {
-            boidsMain.boidUnits[i].UpdateMovementData();
-            movementJob.movementData[i] = boidsMain.boidUnits[i].movementData;
-        }
-        
-        jobHandle = movementJob.Schedule(boidsMain.boidCount, 64);
-        
-        for (int i = 0; i < boidsMain.boidCount; i++) {
-            boidsMain.boidUnits[i].movementData = movementJob.movementData[i];
-            boidsMain.boidUnits[i].UpdateMovement();
-        }
         
     }
 
@@ -41,6 +25,7 @@ public class JobUpdater : MonoBehaviour
 }
 
 public struct MovementData {
+    public float deltaTime;
     public float3 boundCenter;
     public float boundRadius;
     
@@ -77,7 +62,8 @@ public struct MovementData {
         speed = spd;
     }
     
-    public void UpdateData(float addSpd, Vector3 pos, Vector3 fwd, NativeList<float3> neighbors) {
+    public void UpdateData(float deltaTime, float addSpd, Vector3 pos, Vector3 fwd, NativeList<float3> neighbors) {
+        this.deltaTime = deltaTime;
         additionalSpeed = addSpd;
         position = pos;
         forward = fwd;
@@ -132,7 +118,6 @@ public struct MovementData {
         boundsVector = Vector3.Magnitude(offsetToCenter) >= boundRadius ? math.normalize(offsetToCenter) : Vector3.zero;
         return boundsVector * boundsWeight;
     }
-    
 }
 
 [BurstCompile]
