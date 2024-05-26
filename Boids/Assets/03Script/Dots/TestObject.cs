@@ -6,9 +6,12 @@ public class TestObject : MonoBehaviour {
     public float speed = 5f;
     
     private void Start() {
+        Init();
+    }
+
+    public void Init() {
         speed = Random.Range(1f, 5f);
-        // TargetVector를 랜덤하게 초기화
-        TargetVector = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+        TargetVector = new Vector3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
     }
 
     private void Update()
