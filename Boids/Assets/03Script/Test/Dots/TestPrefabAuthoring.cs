@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
 
-public class GetPrefabAuthoring : MonoBehaviour {
+public class TestPrefabAuthoring : MonoBehaviour {
     public GameObject prefab;
 }
 
@@ -9,8 +9,8 @@ public struct EntityPrefabComponent : IComponentData {
     public Entity Value;
 }
 
-public class GetPrefabBaker : Baker<GetPrefabAuthoring> {
-    public override void Bake(GetPrefabAuthoring authoring) {
+public class TestPrefabBaker : Baker<TestPrefabAuthoring> {
+    public override void Bake(TestPrefabAuthoring authoring) {
         Debug.LogWarning("GetPrefabBaker :: Bake!!");
         var entityPrefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic);
         var entity = GetEntity(TransformUsageFlags.Dynamic);
