@@ -1,23 +1,43 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst;
+using Unity.Collections;
 using Unity.Entities;
+using Unity.Mathematics;
+using Unity.Transforms;
 using UnityEngine;
 
-public partial struct TestPrefabSystem : ISystem
-{
+[BurstCompile]
+public partial struct TestPrefabSystem : ISystem {
+    private EntityQuery _query;
    //ball의 이동에 대한 내용 업데이트가 들어가야함
    [BurstCompile]
-   public void Oncreate(ref SystemState state) {
+   public void OnCreate(ref SystemState state) {
+       Debug.LogWarning("TestPrefabSystem OnCreate");
+       // _query = new EntityQueryBuilder(Allocator.Temp).WithAll<TestPrefabComponent, LocalTransform>().Build(ref state);
+       state.RequireForUpdate<TestPrefabComponent>();
    }
 
-   [BurstCompile]
    public void OnUpdate(ref SystemState state) {
+       Debug.LogWarning("TestPrefabSystem OnUpdate");
+
        
+       var ecb = new EntityCommandBuffer(Allocator.Temp);
+       
+       var moveJob = new PrefabMoveJob() {
+              DeltaTime = SystemAPI.Time.DeltaTime
+       };
+       moveJob.Schedule();
    }
-   
 }
 
+[BurstCompile]
+public partial struct PrefabMoveJob : IJobEntity {
+    public float DeltaTime;
+    public void Execute(Entity entity, ref TestPrefabComponent obj, ref LocalTransform transform) {
+        transform.Position += obj.DirVector * obj.Speed * DeltaTime;
+    }    
+}
 
 /* 참고할 스크립트
 [BurstCompile]

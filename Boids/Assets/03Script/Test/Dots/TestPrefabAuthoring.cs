@@ -1,12 +1,16 @@
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TestPrefabAuthoring : MonoBehaviour {
     public GameObject prefab;
 }
 
-public struct EntityPrefabComponent : IComponentData {
-    public Entity Value;
+public struct TestPrefabComponent : IComponentData {
+    public Entity Prefab;
+    public float3 DirVector;
+    public float Speed;
 }
 
 public class TestPrefabBaker : Baker<TestPrefabAuthoring> {
@@ -15,7 +19,11 @@ public class TestPrefabBaker : Baker<TestPrefabAuthoring> {
         var entityPrefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic);
         var entity = GetEntity(TransformUsageFlags.Dynamic);
         
-        AddComponent(entity, new EntityPrefabComponent() {Value = entityPrefab});
+        AddComponent(entity, new TestPrefabComponent() {
+            Prefab = entityPrefab,
+            DirVector = new float3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)),
+            Speed = Random.Range(1f, 5f)
+        });
     }
 }
 
