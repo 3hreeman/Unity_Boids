@@ -1,3 +1,4 @@
+using System.Linq;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Transforms;
@@ -5,18 +6,11 @@ using UnityEngine;
 
 public partial struct TestPrefabSystem : ISystem {
 
-    //ball의 이동에 대한 내용 업데이트가 들어가야함
-   [BurstCompile]
-   public void OnCreate(ref SystemState state) {
-       Debug.LogWarning("TestPrefabSystem OnCreate");
-       state.RequireForUpdate<TestPrefab>();
-   }
-
    public void OnUpdate(ref SystemState state) {
-       Debug.LogWarning("TestPrefabSystem OnUpdate");
        var tick = (float)SystemAPI.Time.DeltaTime;
        foreach(var (obj, xform) in SystemAPI.Query<RefRO<TestPrefab>, RefRW<LocalTransform>>()) {
               xform.ValueRW.Position += obj.ValueRO.DirVector * obj.ValueRO.Speed * tick;
+              Debug.LogWarning($"TestPrefabSystem :: OnUpdate!! {obj.ValueRO.DirVector} {obj.ValueRO.Speed}");
        }
    }
 }

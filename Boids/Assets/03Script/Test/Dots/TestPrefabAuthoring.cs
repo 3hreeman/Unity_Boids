@@ -5,16 +5,17 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class TestPrefabAuthoring : MonoBehaviour {
+    public float3 DirVector = new float3(0, 0, 1);
+    public float Speed = 5f;
     
     class Baker : Baker<TestPrefabAuthoring> {
         public override void Bake(TestPrefabAuthoring authoring) {
-            Debug.LogWarning("TestPrefabAuthoring :: Bake!!");
             var entity = GetEntity(TransformUsageFlags.Dynamic);
-        
-            AddComponent(entity, new TestPrefab() {
-                DirVector = float3.zero,
-                Speed = 0f
-            });
+            var data = new TestPrefab() {
+                DirVector = authoring.DirVector,
+                Speed = authoring.Speed
+            };
+            AddComponent(entity, data);
         }
     }
 }

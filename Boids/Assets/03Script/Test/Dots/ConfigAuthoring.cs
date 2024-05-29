@@ -10,7 +10,6 @@ public class ConfigAuthoring : MonoBehaviour {
     
     class Baker : Baker<ConfigAuthoring> {
         public override void Bake(ConfigAuthoring authoring) {
-            Debug.LogWarning("ConfigAuthoring :: Bake!!");
             var entityPrefab = GetEntity(authoring.Prefab, TransformUsageFlags.Dynamic);
             var entity = GetEntity(TransformUsageFlags.None);
             AddComponent(entity, new Config() {
