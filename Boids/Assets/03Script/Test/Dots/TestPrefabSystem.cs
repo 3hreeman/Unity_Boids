@@ -1,40 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Entities;
-using Unity.Mathematics;
 using Unity.Transforms;
 using UnityEngine;
 
-[BurstCompile]
 public partial struct TestPrefabSystem : ISystem {
-    private EntityQuery _query;
-   //ball의 이동에 대한 내용 업데이트가 들어가야함
+
+    //ball의 이동에 대한 내용 업데이트가 들어가야함
    [BurstCompile]
    public void OnCreate(ref SystemState state) {
        Debug.LogWarning("TestPrefabSystem OnCreate");
-       // _query = new EntityQueryBuilder(Allocator.Temp).WithAll<TestPrefabComponent, LocalTransform>().Build(ref state);
-       state.RequireForUpdate<TestPrefabComponent>();
+       state.RequireForUpdate<TestPrefab>();
    }
 
    public void OnUpdate(ref SystemState state) {
        Debug.LogWarning("TestPrefabSystem OnUpdate");
-
-       
-       var ecb = new EntityCommandBuffer(Allocator.Temp);
-       
-       var moveJob = new PrefabMoveJob() {
-              DeltaTime = SystemAPI.Time.DeltaTime
-       };
-       moveJob.Schedule();
+       var tick = (float)SystemAPI.Time.DeltaTime;
+       foreach(var (obj, xform) in SystemAPI.Query<RefRO<TestPrefab>, RefRW<LocalTransform>>()) {
+              xform.ValueRW.Position += obj.ValueRO.DirVector * obj.ValueRO.Speed * tick;
+       }
    }
 }
 
 [BurstCompile]
 public partial struct PrefabMoveJob : IJobEntity {
     public float DeltaTime;
-    public void Execute(Entity entity, ref TestPrefabComponent obj, ref LocalTransform transform) {
+    public void Execute(Entity entity, ref TestPrefab obj, ref LocalTransform transform) {
         transform.Position += obj.DirVector * obj.Speed * DeltaTime;
     }    
 }
@@ -55,7 +45,7 @@ partial struct CannonBallSystem : ISystem
         var ecbSingleton = SystemAPI.GetSingleton<EndSimulationEntityCommandBufferSystem.Singleton>();
 
         var cannonBallJob = new CannonBallJob
-        {
+        { 
             ECB = ecbSingleton.CreateCommandBuffer(state.WorldUnmanaged),
             DeltaTime = SystemAPI.Time.DeltaTime
         };

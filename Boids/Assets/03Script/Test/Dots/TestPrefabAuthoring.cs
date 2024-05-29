@@ -1,30 +1,27 @@
+using System;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class TestPrefabAuthoring : MonoBehaviour {
-    public GameObject prefab;
+    
+    class Baker : Baker<TestPrefabAuthoring> {
+        public override void Bake(TestPrefabAuthoring authoring) {
+            Debug.LogWarning("TestPrefabAuthoring :: Bake!!");
+            var entity = GetEntity(TransformUsageFlags.Dynamic);
+        
+            AddComponent(entity, new TestPrefab() {
+                DirVector = float3.zero,
+                Speed = 0f
+            });
+        }
+    }
 }
 
-public struct TestPrefabComponent : IComponentData {
-    public Entity Prefab;
+public struct TestPrefab : IComponentData {
     public float3 DirVector;
     public float Speed;
-}
-
-public class TestPrefabBaker : Baker<TestPrefabAuthoring> {
-    public override void Bake(TestPrefabAuthoring authoring) {
-        Debug.LogWarning("GetPrefabBaker :: Bake!!");
-        var entityPrefab = GetEntity(authoring.prefab, TransformUsageFlags.Dynamic);
-        var entity = GetEntity(TransformUsageFlags.Dynamic);
-        
-        AddComponent(entity, new TestPrefabComponent() {
-            Prefab = entityPrefab,
-            DirVector = new float3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f)),
-            Speed = Random.Range(1f, 5f)
-        });
-    }
 }
 
 /*  //using EntityPrefabReference
