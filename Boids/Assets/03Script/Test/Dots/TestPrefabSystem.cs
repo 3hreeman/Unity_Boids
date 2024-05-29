@@ -6,11 +6,11 @@ using UnityEngine;
 
 public partial struct TestPrefabSystem : ISystem {
 
+   [BurstCompile]
    public void OnUpdate(ref SystemState state) {
        var tick = (float)SystemAPI.Time.DeltaTime;
        foreach(var (obj, xform) in SystemAPI.Query<RefRO<TestPrefab>, RefRW<LocalTransform>>()) {
               xform.ValueRW.Position += obj.ValueRO.DirVector * obj.ValueRO.Speed * tick;
-              Debug.LogWarning($"TestPrefabSystem :: OnUpdate!! {obj.ValueRO.DirVector} {obj.ValueRO.Speed}");
        }
    }
 }
