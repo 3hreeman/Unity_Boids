@@ -1,20 +1,23 @@
-    using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
-using Unity.Transforms;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class ConfigAuthoring : MonoBehaviour {
     public GameObject Prefab;
-    public int TestCount;    
+    public int TestCount;
+    public Vector2 SpeedRange;
+    public Vector2 DirRange;
+    
     class Baker : Baker<ConfigAuthoring> {
         public override void Bake(ConfigAuthoring authoring) {
+            Debug.LogWarning("ConfigAuthoring :: Bake!!");
             var entityPrefab = GetEntity(authoring.Prefab, TransformUsageFlags.Dynamic);
             var entity = GetEntity(TransformUsageFlags.None);
             AddComponent(entity, new Config() {
                 Prefab = entityPrefab,
-                TestCount = authoring.TestCount
+                TestCount = authoring.TestCount,
+                SpeedRange = authoring.SpeedRange,
+                DirRange = authoring.DirRange
             });
         }
     }
@@ -22,5 +25,7 @@ public class ConfigAuthoring : MonoBehaviour {
     public struct Config : IComponentData {
         public Entity Prefab;
         public int TestCount;
+        public float2 SpeedRange;
+        public float2 DirRange;
     }
 }
