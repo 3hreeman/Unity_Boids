@@ -1,27 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class BoidsConfigAuthoring : MonoBehaviour {
-
-    public float CellRadius;
-    public float SeparationWeight;
-    public float AlignmentWeight;
-    public float TargetWeight;
-    public float ObstacleAversionDistance;
-    public float MoveSpeed;
+    public GameObject BoidPrefab;
+    public int BoidCount;
+    public float SpawnRange;
+    public float2 SpeedRange;
     
     class Baker : Baker<BoidsConfigAuthoring> {
         public override void Bake(BoidsConfigAuthoring authoring) {
             var entity = GetEntity(TransformUsageFlags.Renderable | TransformUsageFlags.WorldSpace);
+            var prefabToEntity = GetEntity(authoring.BoidPrefab, TransformUsageFlags.Dynamic);
             var data = new BoidConfig() {
-                CellRadius = authoring.CellRadius,
-                SeparationWeight = authoring.SeparationWeight,
-                AlignmentWeight = authoring.AlignmentWeight,
-                TargetWeight = authoring.TargetWeight,
-                ObstacleAversionDistance = authoring.ObstacleAversionDistance,
-                MoveSpeed = authoring.MoveSpeed
+                Prefab = prefabToEntity,
+                BasePosition = authoring.transform.position,
+                Count = authoring.BoidCount,
+                SpawnRange = authoring.SpawnRange,
+                SpeedRange = authoring.SpeedRange
             };
             
             AddComponent(entity, data);
@@ -30,12 +28,10 @@ public class BoidsConfigAuthoring : MonoBehaviour {
 }
 
 
-public partial struct BoidConfig : IComponentData
-{
-    public float CellRadius;
-    public float SeparationWeight;
-    public float AlignmentWeight;
-    public float TargetWeight;
-    public float ObstacleAversionDistance;
-    public float MoveSpeed;
+public partial struct BoidConfig : IComponentData {
+    public Entity Prefab;
+    public float3 BasePosition;
+    public int Count;
+    public float SpawnRange;
+    public float2 SpeedRange;
 }
