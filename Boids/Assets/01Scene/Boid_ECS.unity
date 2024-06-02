@@ -762,12 +762,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3c90a80affdd564193eb1946441e0b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CellRadius: 0
-  SeparationWeight: 0
-  AlignmentWeight: 0
-  TargetWeight: 0
-  ObstacleAversionDistance: 0
-  MoveSpeed: 0
+  BoidPrefab: {fileID: 7335808500138844154, guid: fd031d099ed2b4daca0841b5f218569f, type: 3}
+  BoidCount: 1000
+  SpawnRange: 30
+  SpeedRange:
+    x: 10
+    y: 20
 --- !u!4 &1637688733
 Transform:
   m_ObjectHideFlags: 0

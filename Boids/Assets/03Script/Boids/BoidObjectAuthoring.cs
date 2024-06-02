@@ -20,6 +20,7 @@ public class BoidObjectAuthoring : MonoBehaviour {
 }
 
 public struct BoidObject : IComponentData {
+    public float Speed;
     public float3 TargetVector;
     public float3 EgoVector;
 }
