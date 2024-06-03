@@ -25,12 +25,12 @@ public partial struct BoidsSpawnSystem : ISystem {
             float3 randomVec = Random.insideUnitSphere;
             randomVec *= config.SpawnRange;
             tr.ValueRW.Position = config.BasePosition + randomVec; 
-            Debug.LogWarning($"{config.BasePosition} * {randomVec} = {tr.ValueRW.Position}");
             Quaternion randomRot = Quaternion.Euler(0, Random.Range(0, 360f), 0);
             tr.ValueRW.Rotation = randomRot;
-            
-            obj.ValueRW.TargetVector = new float3(0, 0, 0);
-            obj.ValueRW.EgoVector = new float3(0, 0, 0);
+
+            obj.ValueRW.Speed = Random.Range(config.SpeedRange.x, config.SpeedRange.y);
+            obj.ValueRW.TargetVector = new float3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+            obj.ValueRW.EgoVector = new float3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         }
 
         state.Enabled = false;      //한번의 플로우가 끝나면 해당 시스템을 비활성화
