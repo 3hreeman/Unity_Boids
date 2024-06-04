@@ -21,6 +21,7 @@ public partial struct BoidsSpawnSystem : ISystem {
         foreach (var entity in instances) {
             var tr = SystemAPI.GetComponentRW<LocalTransform>(entity);
             var obj = SystemAPI.GetComponentRW<BoidObject>(entity);
+            var ego = SystemAPI.GetComponentRW<BoidEgo>(entity);
             
             float3 randomVec = Random.insideUnitSphere;
             randomVec *= config.SpawnRange;
@@ -30,7 +31,7 @@ public partial struct BoidsSpawnSystem : ISystem {
 
             obj.ValueRW.Speed = Random.Range(config.SpeedRange.x, config.SpeedRange.y);
             obj.ValueRW.TargetVector = new float3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
-            obj.ValueRW.EgoVector = new float3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
+            ego.ValueRW.EgoVector = new float3(Random.Range(-1f, 1f), Random.Range(-1f, 1f), Random.Range(-1f, 1f));
         }
 
         state.Enabled = false;      //한번의 플로우가 끝나면 해당 시스템을 비활성화

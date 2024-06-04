@@ -763,7 +763,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   BoidPrefab: {fileID: 7335808500138844154, guid: fd031d099ed2b4daca0841b5f218569f, type: 3}
-  BoidCount: 1000
+  BoidCount: 50000
   SpawnRange: 30
   SpeedRange:
     x: 10
