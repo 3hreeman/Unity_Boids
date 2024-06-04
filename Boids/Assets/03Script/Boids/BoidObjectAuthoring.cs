@@ -11,10 +11,15 @@ public class BoidObjectAuthoring : MonoBehaviour {
             var entity = GetEntity(TransformUsageFlags.Renderable);
             var data = new BoidObject() {
                 TargetVector = new float3(0, 0, 0),
-                EgoVector = new float3(0, 0, 0)
+            };
+            
+            var egoData = new BoidEgo() {
+                EgoVector = new float3(0, 0, 0),
+                NextUpdateTime = 0
             };
             
             AddComponent(entity, data);
+            AddComponent(entity, egoData);
         }
     }
 }
@@ -22,7 +27,11 @@ public class BoidObjectAuthoring : MonoBehaviour {
 public struct BoidObject : IComponentData {
     public float Speed;
     public float3 TargetVector;
+}
+
+public struct BoidEgo : IComponentData {
     public float3 EgoVector;
+    public double NextUpdateTime;
 }
 
 
