@@ -16,8 +16,7 @@ public partial struct BoidObjectSystem : ISystem {
         
         
         
-        foreach (var (boid, ego, neighbor, xform) in SystemAPI.Query<RefRW<BoidObject>, RefRO<BoidEgo>, RefRW<BoidNeighbor>, RefRW<LocalTransform>>()) {
-            // CalculateVectors(boid, xform);
+        foreach (var (boid, ego, xform) in SystemAPI.Query<RefRW<BoidObject>, RefRO<BoidEgo>, RefRW<LocalTransform>>()) {
             Vector3 targetVector = CalculateVectors(boid, xform) + ego.ValueRO.EgoVector;
             targetVector = Vector3.Lerp(xform.ValueRO.Forward(), targetVector, tick);
             targetVector = targetVector.normalized;
@@ -58,8 +57,8 @@ public partial struct BoidObjectSystem : ISystem {
     }
     
     private float3 CalculateBoundsVector(RefRW<BoidObject> boid, RefRW<LocalTransform> xform) {
-        Vector3 offsetToCenter= new float3(0, 50, 0) - xform.ValueRW.Position;
-        return offsetToCenter.magnitude >= 15 ? offsetToCenter.normalized : Vector3.zero;
+        Vector3 offsetToCenter= boid.ValueRW.BasePosition - xform.ValueRW.Position;
+        return offsetToCenter.magnitude >= boid.ValueRW.CenterOffset ? offsetToCenter.normalized : Vector3.zero;
     }
 }
 

@@ -12,6 +12,10 @@ public class BoidObjectAuthoring : MonoBehaviour {
             var entity = GetEntity(TransformUsageFlags.Renderable);
             var data = new BoidObject() {
                 TargetVector = new float3(0, 0, 0),
+                Speed = 1,
+                BasePosition = authoring.transform.position,
+                BoundRange = 0,
+                CenterOffset = 0
             };
             
             var egoData = new BoidEgo() {
@@ -31,15 +35,18 @@ public class BoidObjectAuthoring : MonoBehaviour {
             
             AddComponent(entity, data);
             AddComponent(entity, egoData);
-            AddComponent(entity, neighborData);
-            AddComponent(entity, cohesionData);
+            // AddComponent(entity, neighborData);
+            // AddComponent(entity, cohesionData);
         }
     }
 }
 
 public struct BoidObject : IComponentData {
     public float Speed;
+    public float3 BasePosition;
     public float3 TargetVector;
+    public float BoundRange;
+    public float CenterOffset;
 }
 
 public struct BoidEgo : IComponentData {
