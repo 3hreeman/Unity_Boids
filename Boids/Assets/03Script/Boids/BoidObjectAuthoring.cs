@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;
 using UnityEngine;
@@ -18,8 +19,20 @@ public class BoidObjectAuthoring : MonoBehaviour {
                 NextUpdateTime = 0
             };
             
+            var neighborData = new BoidNeighbor() {
+                NeighborRange = 10,
+                NeighborPositions = new NativeList<float3>()
+            };
+            
+            var cohesionData = new BoidCohesion() {
+                CohesionVector = new float3(0, 0, 0),
+                CohesionWeight = 1f
+            };
+            
             AddComponent(entity, data);
             AddComponent(entity, egoData);
+            AddComponent(entity, neighborData);
+            AddComponent(entity, cohesionData);
         }
     }
 }
@@ -34,7 +47,12 @@ public struct BoidEgo : IComponentData {
     public double NextUpdateTime;
 }
 
+public struct BoidNeighbor : IComponentData {
+    public float NeighborRange;
+    public NativeList<float3> NeighborPositions;
+}
 
-
-
-
+public struct BoidCohesion : IComponentData {
+    public float3 CohesionVector;
+    public float CohesionWeight;
+}

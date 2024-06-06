@@ -14,7 +14,9 @@ public partial struct BoidObjectSystem : ISystem {
     public void OnUpdate(ref SystemState state) {
         var tick = (float)SystemAPI.Time.DeltaTime;
         
-        foreach (var (boid, ego, xform) in SystemAPI.Query<RefRW<BoidObject>, RefRO<BoidEgo>, RefRW<LocalTransform>>()) {
+        
+        
+        foreach (var (boid, ego, neighbor, xform) in SystemAPI.Query<RefRW<BoidObject>, RefRO<BoidEgo>, RefRW<BoidNeighbor>, RefRW<LocalTransform>>()) {
             // CalculateVectors(boid, xform);
             Vector3 targetVector = CalculateVectors(boid, xform) + ego.ValueRO.EgoVector;
             targetVector = Vector3.Lerp(xform.ValueRO.Forward(), targetVector, tick);
